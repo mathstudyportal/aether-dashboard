@@ -1,0 +1,738 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>AETHER — Premium Personal Dashboard</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'></text></svg>">
+  
+  <!-- Local Lucide Icons -->
+  <script src="assets/lucide.min.js"></script>
+  
+  <!-- Apple SF-inspired Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+  
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body class="theme-alpine tv-mode" id="appBody">
+
+  <!-- Dynamic Photographic Wallpaper Layer -->
+  <div class="wallpaper-viewport" id="wallpaperViewport">
+    <div class="wallpaper-canvas" id="wallpaperCanvas"></div>
+    <div class="wallpaper-dimmer" id="wallpaperDimmer"></div>
+    <div class="wallpaper-vignette"></div>
+  </div>
+
+  <!-- Ambient Sound Audio Synth Status Banner (Dynamic Island) -->
+  <div class="aether-status-island" id="statusIsland">
+    <div class="island-icon-wrap" id="islandIconWrap">
+      <i data-lucide="sparkles" class="island-icon" id="islandIcon"></i>
+    </div>
+    <div class="island-info">
+      <span class="island-title" id="islandTitle">AETHER</span>
+      <span class="island-sub" id="islandSubtitle">Atmospheric Engine</span>
+    </div>
+    <div class="island-visualizer" id="islandVisualizer">
+      <span class="vis-bar"></span>
+      <span class="vis-bar"></span>
+      <span class="vis-bar"></span>
+      <span class="vis-bar"></span>
+    </div>
+  </div>
+
+  <!-- Top macOS / Apple TV Status Bar -->
+  <header class="aether-top-bar" id="topBar">
+    <div class="bar-left">
+      <div class="brand-badge tv-focusable" id="brandBadge" tabindex="0" title="AETHER Workspace">
+        <span class="apple-emblem"></span>
+        <span class="brand-text">AETHER</span>
+        <span class="mode-badge" id="environmentBadge">TV MODE</span>
+      </div>
+      <div class="breadcrumb-separator">/</div>
+      <span class="active-category-name" id="topCategoryName">All Applications</span>
+    </div>
+
+    <div class="bar-center">
+      <!-- Minimalist Quick Weather Pill -->
+      <div class="weather-pill tv-focusable glass-pill" id="weatherPill" tabindex="0" title="Current Ambient Conditions">
+        <i data-lucide="cloud-sun" class="weather-icon" id="weatherIcon"></i>
+        <span class="weather-temp" id="weatherTemp">72°F</span>
+        <span class="weather-condition" id="weatherCondition">Partly Cloudy</span>
+      </div>
+    </div>
+
+    <div class="bar-right">
+      <!-- Search Trigger Button -->
+      <button class="top-nav-btn tv-focusable" id="openSearchBtn" tabindex="0" title="Universal Search (/)">
+        <i data-lucide="search"></i>
+        <span class="nav-btn-label">Search</span>
+        <kbd class="nav-kbd">⌘K</kbd>
+      </button>
+
+      <!-- Ambient Soundscape Quick Toggle -->
+      <button class="top-nav-btn tv-focusable" id="ambientSoundBtn" tabindex="0" title="Ambient Soundscapes">
+        <i data-lucide="headphones" id="ambientBtnIcon"></i>
+        <span class="nav-btn-label" id="ambientBtnLabel">Ambient</span>
+      </button>
+
+      <!-- Always-On Display Manual Trigger -->
+      <button class="top-nav-btn tv-focusable" id="ambientModeTriggerBtn" tabindex="0" title="Always-On Display (Ambient Mode)">
+        <i data-lucide="moon"></i>
+        <span class="nav-btn-label">Ambient Mode</span>
+      </button>
+
+      <!-- Theme Switcher Trigger -->
+      <button class="top-nav-btn tv-focusable" id="themePickerBtn" tabindex="0" title="Theme Selector">
+        <i data-lucide="palette"></i>
+        <span class="nav-btn-label" id="currentThemeLabel">Alpine</span>
+      </button>
+
+      <!-- Full Settings Trigger -->
+      <button class="top-nav-btn tv-focusable" id="openSettingsBtn" tabindex="0" title="Settings Center">
+        <i data-lucide="sliders-horizontal"></i>
+      </button>
+    </div>
+  </header>
+
+  <!-- Main Viewport Shell -->
+  <div class="aether-shell" id="aetherShell">
+
+    <!-- Left Stage Navigator (Sidebar for Categories & Inputs) -->
+    <aside class="aether-sidebar glass-surface" id="sidebar">
+      <div class="sidebar-heading">
+        <span class="sidebar-label">COLLECTIONS</span>
+        <button class="sidebar-add-btn tv-focusable" id="sidebarAddCategoryBtn" tabindex="0" title="Add Collection">
+          <i data-lucide="folder-plus"></i>
+        </button>
+      </div>
+
+      <nav class="sidebar-nav" id="sidebarNav">
+        <!-- Injected via JavaScript -->
+      </nav>
+
+      <!-- Television Physical Inputs Section (TV Mode Only) -->
+      <div class="sidebar-tv-section" id="sidebarTvInputsSection">
+        <div class="sidebar-heading">
+          <span class="sidebar-label">TV INPUTS</span>
+        </div>
+        <div class="tv-inputs-list" id="tvInputsList">
+          <button class="sidebar-item tv-focusable" data-action="launch-input" data-input-id="HDMI_1" tabindex="0">
+            <span class="sidebar-item-icon"><i data-lucide="tv"></i></span>
+            <span class="sidebar-item-text">HDMI 1</span>
+          </button>
+          <button class="sidebar-item tv-focusable" data-action="launch-input" data-input-id="HDMI_2" tabindex="0">
+            <span class="sidebar-item-icon"><i data-lucide="tv"></i></span>
+            <span class="sidebar-item-text">HDMI 2</span>
+          </button>
+          <button class="sidebar-item tv-focusable" data-action="launch-input" data-input-id="com.webos.app.livetv" tabindex="0">
+            <span class="sidebar-item-icon"><i data-lucide="radio"></i></span>
+            <span class="sidebar-item-text">Live TV</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Persistence Status Footer -->
+      <div class="sidebar-footer">
+        <div class="sync-status-card" id="syncStatusCard" title="Local Persistence Health">
+          <div class="sync-dot active"></div>
+          <div class="sync-info">
+            <span class="sync-title">Storage Synced</span>
+            <span class="sync-detail" id="syncDetailText">LG WebOS Persistent Flash</span>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main Workspace Stage Canvas -->
+    <main class="aether-canvas" id="canvas">
+
+      <!-- ================= HERO SECTION ================= -->
+      <section class="aether-hero-section" id="heroSection">
+        
+        <!-- Live Apple StandBy Hero Clock Island -->
+        <div class="hero-clock-capsule glass-surface" id="heroClockCapsule">
+          <div class="clock-meta-row">
+            <span class="personal-greeting" id="personalGreeting">Good evening, Bashar</span>
+            <div class="day-progress-chip" id="dayProgressChip">
+              <i data-lucide="clock-4"></i>
+              <span id="dayProgressText">75% of day</span>
+            </div>
+          </div>
+
+          <!-- Digital Clock Display (Multiple Styles Supported) -->
+          <div class="clock-display-row" id="clockDisplayRow">
+            <div class="clock-main-digits" id="clockMainDigits">12:00</div>
+            <div class="clock-auxiliary">
+              <span class="clock-seconds-pill" id="clockSecondsPill">00</span>
+              <span class="clock-ampm-pill" id="clockAmPmPill">PM</span>
+            </div>
+          </div>
+
+          <!-- Analog Clock Face (Rendered when Analog Style Selected) -->
+          <div class="analog-clock-container" id="analogClockContainer" style="display: none;">
+            <div class="analog-clock-face">
+              <div class="analog-center-pin"></div>
+              <div class="analog-hand hour" id="analogHour"></div>
+              <div class="analog-hand minute" id="analogMinute"></div>
+              <div class="analog-hand second" id="analogSecond"></div>
+              <!-- Dial Markers -->
+              <span class="marker marker-12">12</span>
+              <span class="marker marker-3">3</span>
+              <span class="marker marker-6">6</span>
+              <span class="marker marker-9">9</span>
+            </div>
+          </div>
+
+          <!-- Date & Day Elapsed Track -->
+          <div class="clock-date-row">
+            <span class="full-calendar-date" id="fullCalendarDate">Saturday, November 14, 2026</span>
+            <div class="day-elapsed-track">
+              <div class="day-elapsed-bar" id="dayElapsedBar"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Integrated Spotlight Search Bar -->
+        <div class="aether-search-strip glass-surface tv-focusable" id="searchStrip" tabindex="0">
+          <div class="search-engine-pill" id="searchEnginePill">
+            <span class="engine-label" id="activeEngineLabel">Universal</span>
+            <i data-lucide="chevron-down"></i>
+          </div>
+          <div class="search-input-field">
+            <input 
+              type="text" 
+              id="universalSearchInput" 
+              placeholder="Search apps, bookmarks, web, or shortcuts... (Press / or ⌘K)" 
+              autocomplete="off"
+              spellcheck="false"
+            />
+            <button class="clear-search-btn" id="clearSearchBtn" title="Clear Search">
+              <i data-lucide="x"></i>
+            </button>
+          </div>
+          <div class="search-kbd-hint">
+            <kbd class="kbd-badge">ENTER ↵</kbd>
+          </div>
+        </div>
+
+      </section>
+
+      <!-- ================= APPLICATION LAUNCHER SECTION ================= -->
+      <section class="aether-apps-section" id="appsSection">
+        
+        <div class="section-toolbar">
+          <div class="toolbar-left">
+            <h2 class="section-heading" id="sectionHeading">All Applications</h2>
+            <span class="count-pill" id="appCountPill">0 apps</span>
+          </div>
+
+          <div class="toolbar-right">
+            <!-- View Mode Switcher -->
+            <div class="view-mode-pill glass-pill">
+              <button class="view-toggle-btn active tv-focusable" data-view="grid" id="viewGridBtn" tabindex="0" title="Bento Grid">
+                <i data-lucide="layout-grid"></i>
+              </button>
+              <button class="view-toggle-btn tv-focusable" data-view="shelf" id="viewShelfBtn" tabindex="0" title="Horizontal Shelf">
+                <i data-lucide="rows-3"></i>
+              </button>
+              <button class="view-toggle-btn tv-focusable" data-view="compact" id="viewCompactBtn" tabindex="0" title="Compact List">
+                <i data-lucide="list"></i>
+              </button>
+            </div>
+
+            <!-- Sort Selector -->
+            <div class="sort-chip glass-pill">
+              <i data-lucide="arrow-down-up"></i>
+              <select id="sortOrderSelect" class="tv-focusable" tabindex="0">
+                <option value="custom">Custom Order</option>
+                <option value="name-asc">Alphabetical (A–Z)</option>
+                <option value="name-desc">Alphabetical (Z–A)</option>
+                <option value="recent">Recently Opened</option>
+              </select>
+            </div>
+
+            <!-- Add Application Button -->
+            <button class="action-btn primary-action tv-focusable" id="addAppBtn" tabindex="0">
+              <i data-lucide="plus"></i>
+              <span>Add Application</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Application Cards Grid / Shelf -->
+        <div class="applications-container view-grid" id="applicationsContainer">
+          <!-- Dynamic Cards Injected via app.js -->
+        </div>
+
+        <!-- Empty State Container -->
+        <div class="empty-state-view glass-surface" id="emptyStateView" style="display: none;">
+          <div class="empty-state-icon">
+            <i data-lucide="sparkle"></i>
+          </div>
+          <h3>No Applications Found</h3>
+          <p>Add your favorite streaming services, websites, tools, or TV inputs to personalize this view.</p>
+          <button class="action-btn primary-action tv-focusable" id="emptyStateAddBtn" tabindex="0">
+            <i data-lucide="plus"></i>
+            <span>Add Shortcut</span>
+          </button>
+        </div>
+
+      </section>
+
+      <!-- ================= OPTIONAL WIDGETS SECTION ================= -->
+      <section class="aether-widgets-section" id="widgetsSection">
+        <div class="widgets-header">
+          <div class="toolbar-left">
+            <h3 class="widgets-heading">System Widgets</h3>
+            <span class="widgets-subheading">Personal Productivity & Ambient Media</span>
+          </div>
+          <button class="action-btn secondary-action tv-focusable" id="toggleWidgetsVisibilityBtn" tabindex="0">
+            <i data-lucide="layout"></i>
+            <span id="toggleWidgetsLabel">Configure Widgets</span>
+          </button>
+        </div>
+
+        <div class="widgets-grid" id="widgetsGrid">
+          
+          <!-- Widget 1: Interactive Calendar -->
+          <div class="widget-card glass-surface" id="widgetCalendar">
+            <div class="widget-header">
+              <div class="widget-title">
+                <i data-lucide="calendar"></i>
+                <span>Calendar</span>
+              </div>
+              <span class="widget-badge" id="widgetCalMonth">November 2026</span>
+            </div>
+            <div class="calendar-widget-body" id="calendarWidgetBody">
+              <!-- Rendered via JS -->
+            </div>
+          </div>
+
+          <!-- Widget 2: Ambient Weather Details -->
+          <div class="widget-card glass-surface" id="widgetWeather">
+            <div class="widget-header">
+              <div class="widget-title">
+                <i data-lucide="sun"></i>
+                <span>Weather</span>
+              </div>
+              <span class="widget-badge" id="weatherLocationBadge">Local</span>
+            </div>
+            <div class="weather-widget-body">
+              <div class="weather-current-row">
+                <div class="weather-big-temp" id="weatherBigTemp">72°</div>
+                <div class="weather-condition-col">
+                  <span class="weather-main-stat" id="weatherMainStat">Partly Cloudy</span>
+                  <span class="weather-sub-stat" id="weatherSubStat">High 75° · Low 58°</span>
+                </div>
+              </div>
+              <div class="weather-forecast-row" id="weatherForecastRow">
+                <!-- Forecast Pills -->
+              </div>
+            </div>
+          </div>
+
+          <!-- Widget 3: Ambient Soundscapes Studio -->
+          <div class="widget-card glass-surface" id="widgetAmbientSound">
+            <div class="widget-header">
+              <div class="widget-title">
+                <i data-lucide="headphones"></i>
+                <span>Atmospheric Audio</span>
+              </div>
+              <button class="sound-power-btn tv-focusable" id="soundWidgetPowerBtn" tabindex="0" title="Audio Generator">
+                <i data-lucide="power"></i>
+              </button>
+            </div>
+            <div class="ambient-widget-body">
+              <div class="sound-presets-row">
+                <button class="sound-preset-btn active tv-focusable" data-sound="rain" tabindex="0">🌧️ Rain</button>
+                <button class="sound-preset-btn tv-focusable" data-sound="waves" tabindex="0">🌊 Waves</button>
+                <button class="sound-preset-btn tv-focusable" data-sound="forest" tabindex="0">🌲 Forest</button>
+                <button class="sound-preset-btn tv-focusable" data-sound="softair" tabindex="0">💨 Soft Air</button>
+              </div>
+              <div class="volume-slider-row">
+                <i data-lucide="volume-1"></i>
+                <input type="range" id="widgetVolumeSlider" min="0" max="100" value="45" class="tv-focusable" tabindex="0">
+                <i data-lucide="volume-2"></i>
+              </div>
+            </div>
+          </div>
+
+          <!-- Widget 4: Quick Notes & Reminders -->
+          <div class="widget-card glass-surface" id="widgetNotes">
+            <div class="widget-header">
+              <div class="widget-title">
+                <i data-lucide="sticky-note"></i>
+                <span>Quick Note</span>
+              </div>
+              <button class="note-save-pill tv-focusable" id="noteSavePill" tabindex="0">Saved</button>
+            </div>
+            <div class="notes-widget-body">
+              <textarea id="quickNoteTextarea" placeholder="Write reminders, favorite channels, or to-do notes here..." spellcheck="false"></textarea>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <!-- macOS / Apple TV Floating Pinned Dock -->
+  <div class="aether-dock-wrapper" id="dockWrapper">
+    <div class="aether-floating-dock glass-surface" id="floatingDock">
+      <!-- Pinned Shortcuts injected via app.js -->
+    </div>
+  </div>
+
+  <!-- ================= ALWAYS-ON DISPLAY (AMBIENT MODE) ================= -->
+  <!-- iPhone-Inspired Always-On Display with OLED Pixel Shift Burn-In Protection -->
+  <div class="aether-ambient-overlay" id="ambientOverlay" aria-hidden="true">
+    <div class="ambient-wallpaper-layer" id="ambientWallpaperLayer"></div>
+    <div class="ambient-dimming-layer" id="ambientDimmingLayer"></div>
+    
+    <!-- Floating Minimal Display (Pixel Shifted subtly every 60s) -->
+    <div class="ambient-screen-stage" id="ambientStage">
+      
+      <div class="ambient-clock-unit">
+        <div class="ambient-time-digits" id="ambientTimeDigits">12:00</div>
+        <div class="ambient-seconds-ticker" id="ambientSecondsTicker">00</div>
+        <div class="ambient-ampm" id="ambientAmPm">PM</div>
+      </div>
+
+      <div class="ambient-date-unit" id="ambientDateUnit">
+        Saturday, November 14
+      </div>
+
+      <div class="ambient-weather-unit" id="ambientWeatherUnit">
+        <i data-lucide="cloud-sun" class="ambient-weather-icon" id="ambientWeatherIcon"></i>
+        <span id="ambientWeatherText">72°F · Calm</span>
+      </div>
+
+      <div class="ambient-wake-hint" id="ambientWakeHint">
+        <span>Press any button on your remote to wake</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= MODALS & CONTROL SHEETS ================= -->
+
+  <!-- Modal 1: Add / Edit Application Shortcut (macOS Sheet) -->
+  <div class="modal-backdrop" id="appModalBackdrop">
+    <div class="macos-sheet-modal glass-surface" id="appModal">
+      <div class="sheet-titlebar">
+        <div class="traffic-lights">
+          <span class="light close" id="modalTrafficClose"></span>
+          <span class="light minimize"></span>
+          <span class="light zoom"></span>
+        </div>
+        <h3 class="sheet-title" id="appModalTitle">Add Application</h3>
+        <div class="traffic-spacer"></div>
+      </div>
+
+      <form id="appModalForm" class="sheet-body">
+        <input type="hidden" id="editAppId" value="">
+
+        <div class="form-control-group">
+          <label for="inputAppName">Application Name</label>
+          <input type="text" id="inputAppName" class="tv-focusable" placeholder="e.g. YouTube, Netflix, GitHub" required tabindex="0">
+        </div>
+
+        <div class="form-control-group">
+          <label for="inputAppUrl">Target URL or WebOS App ID</label>
+          <input type="text" id="inputAppUrl" class="tv-focusable" placeholder="https://youtube.com or youtube.leanback.v4" required tabindex="0">
+        </div>
+
+        <div class="form-control-row">
+          <div class="form-control-group flex-1">
+            <label for="selectAppCategory">Category</label>
+            <select id="selectAppCategory" class="tv-focusable" tabindex="0">
+              <!-- Populated via JS -->
+            </select>
+          </div>
+
+          <div class="form-control-group flex-1">
+            <label for="inputAppIcon">Icon Name or Emoji</label>
+            <input type="text" id="inputAppIcon" class="tv-focusable" placeholder="e.g. 🎬 or play, tv, code" tabindex="0">
+          </div>
+        </div>
+
+        <div class="form-control-group">
+          <label>Color Accent Tag</label>
+          <div class="color-tag-selector" id="colorTagSelector">
+            <button type="button" class="color-swatch-dot active tv-focusable" data-color="blue" style="--swatch-hex: #0A84FF;" tabindex="0"></button>
+            <button type="button" class="color-swatch-dot tv-focusable" data-color="purple" style="--swatch-hex: #BF5AF2;" tabindex="0"></button>
+            <button type="button" class="color-swatch-dot tv-focusable" data-color="pink" style="--swatch-hex: #FF375F;" tabindex="0"></button>
+            <button type="button" class="color-swatch-dot tv-focusable" data-color="orange" style="--swatch-hex: #FF9F0A;" tabindex="0"></button>
+            <button type="button" class="color-swatch-dot tv-focusable" data-color="green" style="--swatch-hex: #30D158;" tabindex="0"></button>
+            <button type="button" class="color-swatch-dot tv-focusable" data-color="cyan" style="--swatch-hex: #64D2FF;" tabindex="0"></button>
+          </div>
+        </div>
+
+        <div class="form-checkbox-control">
+          <label class="aether-checkbox">
+            <input type="checkbox" id="checkboxPinToDock" class="tv-focusable" tabindex="0">
+            <span class="checkbox-box"></span>
+            <span>Pin to Bottom Dock</span>
+          </label>
+        </div>
+
+        <div class="sheet-button-row">
+          <button type="button" class="btn-cancel tv-focusable" id="cancelAppModalBtn" tabindex="0">Cancel</button>
+          <button type="submit" class="btn-submit tv-focusable" id="saveAppModalBtn" tabindex="0">Save Shortcut</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal 2: Scenic Wallpaper Gallery & Ambient Backgrounds -->
+  <div class="modal-backdrop" id="wallpaperModalBackdrop">
+    <div class="macos-sheet-modal wallpaper-gallery-sheet glass-surface" id="wallpaperGallerySheet">
+      <div class="sheet-titlebar">
+        <h3 class="sheet-title">Scenic Wallpaper Library</h3>
+        <button class="sheet-close-icon tv-focusable" id="closeWallpaperSheetBtn" tabindex="0">
+          <i data-lucide="x"></i>
+        </button>
+      </div>
+
+      <div class="wallpaper-cards-grid" id="wallpaperCardsGrid">
+        <!-- Rendered via JS -->
+      </div>
+
+      <div class="wallpaper-opt-bar">
+        <div class="slider-box">
+          <label for="wallpaperBlurSlider">
+            <i data-lucide="eye"></i>
+            <span>Glass Blur</span>
+          </label>
+          <input type="range" id="wallpaperBlurSlider" min="0" max="40" value="16" class="tv-focusable" tabindex="0">
+          <span class="slider-display" id="blurValLabel">16px</span>
+        </div>
+
+        <div class="slider-box">
+          <label for="wallpaperDimSlider">
+            <i data-lucide="moon"></i>
+            <span>Backdrop Dim</span>
+          </label>
+          <input type="range" id="wallpaperDimSlider" min="10" max="85" value="45" class="tv-focusable" tabindex="0">
+          <span class="slider-display" id="dimValLabel">45%</span>
+        </div>
+
+        <div class="slider-box">
+          <label for="wallpaperRotationSelect">
+            <i data-lucide="refresh-cw"></i>
+            <span>Auto Rotate</span>
+          </label>
+          <select id="wallpaperRotationSelect" class="tv-focusable" tabindex="0">
+            <option value="off">Off (Static)</option>
+            <option value="1">Every 1 Minute</option>
+            <option value="5">Every 5 Minutes</option>
+            <option value="15">Every 15 Minutes</option>
+            <option value="60">Every 1 Hour</option>
+          </select>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal 3: Theme Selector Modal (5 Original Themes) -->
+  <div class="modal-backdrop" id="themeModalBackdrop">
+    <div class="macos-sheet-modal theme-picker-sheet glass-surface">
+      <div class="sheet-titlebar">
+        <h3 class="sheet-title">Select Design Theme</h3>
+        <button class="sheet-close-icon tv-focusable" id="closeThemeModalBtn" tabindex="0">
+          <i data-lucide="x"></i>
+        </button>
+      </div>
+
+      <div class="themes-showcase-grid" id="themesShowcaseGrid">
+        
+        <!-- Theme 1: Alpine -->
+        <div class="theme-card-option tv-focusable active" data-theme="alpine" tabindex="0">
+          <div class="theme-preview-card" style="background-image: url('assets/wallpapers/alpine.jpg');">
+            <div class="theme-glass-chip">Alpine</div>
+          </div>
+          <div class="theme-card-desc">
+            <h4>Alpine</h4>
+            <p>Cinematic mountain ridges, reflective alpine waters, deep charcoal glass panels.</p>
+          </div>
+        </div>
+
+        <!-- Theme 2: Pacific -->
+        <div class="theme-card-option tv-focusable" data-theme="pacific" tabindex="0">
+          <div class="theme-preview-card" style="background-image: url('assets/wallpapers/pacific.jpg');">
+            <div class="theme-glass-chip">Pacific</div>
+          </div>
+          <div class="theme-card-desc">
+            <h4>Pacific</h4>
+            <p>Pacific coastlines, coastal ocean mist, soft blue-gray accents and glass surfaces.</p>
+          </div>
+        </div>
+
+        <!-- Theme 3: Metropolitan -->
+        <div class="theme-card-option tv-focusable" data-theme="metropolitan" tabindex="0">
+          <div class="theme-preview-card" style="background-image: url('assets/wallpapers/metropolitan.jpg');">
+            <div class="theme-glass-chip">Metropolitan</div>
+          </div>
+          <div class="theme-card-desc">
+            <h4>Metropolitan</h4>
+            <p>Night city skyline, architectural symmetry, warm amber specular lighting.</p>
+          </div>
+        </div>
+
+        <!-- Theme 4: Horizon -->
+        <div class="theme-card-option tv-focusable" data-theme="horizon" tabindex="0">
+          <div class="theme-preview-card" style="background-image: url('assets/wallpapers/horizon.jpg');">
+            <div class="theme-glass-chip">Horizon</div>
+          </div>
+          <div class="theme-card-desc">
+            <h4>Horizon</h4>
+            <p>Golden sunset clouds, natural horizon gradients, warm rose and amber tones.</p>
+          </div>
+        </div>
+
+        <!-- Theme 5: Monochrome -->
+        <div class="theme-card-option tv-focusable" data-theme="monochrome" tabindex="0">
+          <div class="theme-preview-card" style="background-image: url('assets/wallpapers/monochrome.jpg');">
+            <div class="theme-glass-chip">Monochrome</div>
+          </div>
+          <div class="theme-card-desc">
+            <h4>Monochrome</h4>
+            <p>Pure dark obsidian, minimal abstract geometry, brushed silver typography.</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal 4: Complete Settings Center Drawer (Slide-out) -->
+  <aside class="aether-settings-drawer glass-surface" id="settingsDrawer">
+    <div class="drawer-header">
+      <div class="drawer-title">
+        <i data-lucide="sliders-horizontal"></i>
+        <span>AETHER Settings</span>
+      </div>
+      <button class="drawer-close-btn tv-focusable" id="closeSettingsDrawerBtn" tabindex="0">
+        <i data-lucide="x"></i>
+      </button>
+    </div>
+
+    <div class="drawer-content">
+      
+      <!-- Section 1: Always-On Display (Ambient Mode) -->
+      <div class="settings-card">
+        <div class="settings-card-header">
+          <i data-lucide="moon"></i>
+          <h4>Always-On Display (Ambient)</h4>
+        </div>
+        <p class="settings-card-info">Automatically transitions to an iPhone-inspired clock screen during inactivity. Completely advertisement-free.</p>
+        
+        <div class="settings-row">
+          <span>Inactivity Timeout</span>
+          <select id="selectAmbientTimeout" class="tv-focusable" tabindex="0">
+            <option value="1">1 Minute</option>
+            <option value="2" selected>2 Minutes</option>
+            <option value="5">5 Minutes</option>
+            <option value="10">10 Minutes</option>
+            <option value="15">15 Minutes</option>
+            <option value="0">Disabled</option>
+          </select>
+        </div>
+
+        <div class="settings-row">
+          <span>OLED Pixel-Shift Protection</span>
+          <label class="toggle-switch">
+            <input type="checkbox" id="togglePixelShift" class="tv-focusable" checked tabindex="0">
+            <span class="toggle-slider"></span>
+          </label>
+        </div>
+
+        <div class="settings-row">
+          <span>Clock Typography Style</span>
+          <select id="selectClockStyle" class="tv-focusable" tabindex="0">
+            <option value="minimalist">Minimalist Light SF</option>
+            <option value="standby">StandBy Bold Stacked</option>
+            <option value="centered">Centered Modern</option>
+            <option value="analog">Classic Analog Clock</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Section 2: Television & HDMI Startup Fixes -->
+      <div class="settings-card">
+        <div class="settings-card-header">
+          <i data-lucide="tv"></i>
+          <h4>Smart TV Optimization & HDMI 1</h4>
+        </div>
+        <p class="settings-card-info">Solves the TV HDMI 1 auto-switch and boot layout problems.</p>
+        
+        <div class="settings-row">
+          <span>TV D-Pad Spatial Navigation</span>
+          <label class="toggle-switch">
+            <input type="checkbox" id="toggleTvNav" class="tv-focusable" checked tabindex="0">
+            <span class="toggle-slider"></span>
+          </label>
+        </div>
+
+        <div class="settings-row">
+          <span>24-Hour Time Format</span>
+          <label class="toggle-switch">
+            <input type="checkbox" id="toggle24HourFormat" class="tv-focusable" tabindex="0">
+            <span class="toggle-slider"></span>
+          </label>
+        </div>
+
+        <div class="settings-row">
+          <span>Show Live Seconds Ticker</span>
+          <label class="toggle-switch">
+            <input type="checkbox" id="toggleShowSeconds" class="tv-focusable" checked tabindex="0">
+            <span class="toggle-slider"></span>
+          </label>
+        </div>
+
+        <!-- TV Boot Instructions Expandable -->
+        <div class="tv-guide-callout">
+          <strong>ℹ️ Stop TV Booting to HDMI 1:</strong>
+          <p>On your LG Remote: Press Settings ➔ General ➔ System ➔ Additional Settings ➔ Home Settings. Change <em>Power On Screen</em> from "Recent Input" to <strong>"Home"</strong>.</p>
+        </div>
+      </div>
+
+      <!-- Section 3: Backup, Restore & Data Persistence -->
+      <div class="settings-card">
+        <div class="settings-card-header">
+          <i data-lucide="database"></i>
+          <h4>Data Persistence & Backup</h4>
+        </div>
+        <p class="settings-card-info">Every customized layout, app position, wallpaper, and theme is saved automatically to persistent local storage.</p>
+        
+        <div class="drawer-btn-grid">
+          <button class="drawer-btn tv-focusable" id="exportBackupBtn" tabindex="0">
+            <i data-lucide="download"></i>
+            <span>Export Backup (JSON)</span>
+          </button>
+          <button class="drawer-btn tv-focusable" id="importBackupBtn" tabindex="0">
+            <i data-lucide="upload"></i>
+            <span>Restore Backup</span>
+          </button>
+          <input type="file" id="importFileInput" accept=".json" style="display: none;">
+          <button class="drawer-btn btn-danger tv-focusable" id="resetAetherDefaultsBtn" tabindex="0">
+            <i data-lucide="rotate-ccw"></i>
+            <span>Reset Demo Defaults</span>
+          </button>
+        </div>
+      </div>
+
+    </div>
+  </aside>
+
+  <!-- Notification Toast Container -->
+  <div class="toast-hub" id="toastHub"></div>
+
+  <!-- Spatial Focus Highlight Cursor (D-Pad TV Mode) -->
+  <div class="spatial-focus-ring" id="spatialFocusRing"></div>
+
+  <script src="app.js"></script>
+</body>
+</html>

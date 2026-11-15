@@ -1,0 +1,48 @@
+{
+  "id": "com.webos.app.home",
+  "version": "2.0.0",
+  "vendor": "AETHER",
+  "type": "web",
+  "main": "index.html",
+  "title": "Home",
+  "transparent": false,
+  "icon": "icon.png",
+  "mediumIcon": "icon.png",
+  "largeIcon": "icon.png",
+  "iconColor": "#0A84FF",
+  "visible": false,
+  "class": {
+    "hidden": true
+  },
+  "disableBackHistoryAPI": true,
+  "nativeLifeCycleInterfaceVersion": 2,
+  "lockable": false,
+  "supportQuickStart": true,
+  "hasPromotion": false,
+  "accessibility": {
+    "supportsAudioGuidance": true
+  },
+  "handleScreenRemoteKey": true,
+  "enablePigScreenSaver": false,
+  "hasAccountService": true,
+  "appCategory": [
+    "home"
+  ],
+  "requiredPermissions": [
+    "applications",
+    "applications.launcher",
+    "applications.operation",
+    "applications.internal",
+    "hlp.internal",
+    "launcher.status",
+    "launcher.control",
+    "sdx.control",
+    "settings",
+    "system",
+    "database.internal",
+    "database",
+    "private",
+    "usercontextmanager.internal"
+  ],
+  "bgColor": "#000000"
+}

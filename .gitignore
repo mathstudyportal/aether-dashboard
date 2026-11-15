@@ -1,0 +1,8 @@
+# Archive files
+*.tar.gz
+*.zip
+
+# System artifacts
+.DS_Store
+*.log
+10-cleanyourtv-home
